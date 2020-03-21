@@ -12,12 +12,13 @@ class Bookshelf extends React.Component {
         <h2 className="bookshelf-title">{this.props.title}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {this.props.books.map((book) => (
+            {this.props.bookshelf.books.map((book) => (
               <Book
                 key={md5(book.title)}
                 title={book.title}
                 authors={book.authors}
                 image={book.image}
+                bookshelfId={this.props.bookshelf.id}
                 onMoveBook={this.props.onMoveBook}
               />
             ))}
@@ -32,6 +33,7 @@ class Book extends React.Component {
 
   render() {
     const title = this.props.title;
+    const bookshelfId = this.props.bookshelfId;
     return (
       <li>
         <div className="book">
@@ -39,8 +41,10 @@ class Book extends React.Component {
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.image})` }}></div>
             <div className="book-shelf-changer">
               <select
+                value={bookshelfId}
                 onChange={(event) => {
-                  this.props.onMoveBook(title, event.target.value)
+                  event.preventDefault()
+                  this.props.onMoveBook(title, bookshelfId, event.target.value)
                 }}
               >
                 <option value="move" disabled>Move to...</option>

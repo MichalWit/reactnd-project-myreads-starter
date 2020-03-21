@@ -17,18 +17,18 @@ class ShowBookshelfs extends React.Component {
           <div>
             <Bookshelf
               title='Currently Reading'
-              books={this.props.currentlyReading}
-              onMoveBook={this.props.onMoveBook(Shelf.CURRENTLY_READING)}
+              bookshelf={this.props.currentlyReading}
+              onMoveBook={this.props.onMoveBook}
             />
             <Bookshelf
               title='Want to Read'
-              books={this.props.wantToRead}
-              onMoveBook={this.props.onMoveBook(Shelf.WANT_TO_READ)}
+              bookshelf={this.props.wantToRead}
+              onMoveBook={this.props.onMoveBook}
             />
             <Bookshelf
               title='Read'
-              books={this.props.read}
-              onMoveBook={this.props.onMoveBook(Shelf.READ)}
+              bookshelf={this.props.read}
+              onMoveBook={this.props.onMoveBook}
             />
           </div>
         </div>

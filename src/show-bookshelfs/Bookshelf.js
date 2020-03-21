@@ -1,7 +1,7 @@
 import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './../App.css'
-import { Shelf } from '../App';
+import { Shelf } from '../main/BooksApp';
 var md5 = require('md5');
 
 class Bookshelf extends React.Component {

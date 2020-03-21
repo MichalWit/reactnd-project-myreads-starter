@@ -1,10 +1,8 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-// import * as BooksAPI from './BooksAPI'
-import './App.css'
-import ShowBookshelfs from './show-bookshelfs/ShowBookshelfs'
-import Search from './search/Search'
-import * as BooksAPI from './BooksAPI'
+import './../App.css'
+import ShowBookshelfs from './../show-bookshelfs/ShowBookshelfs'
+import Search from '../search/Search'
 
 export const Shelf = {
   CURRENTLY_READING: 1,

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import BooksApp from './BooksApp'
 
 /** 
  This course is not designed to teach Test Driven Development. 
@@ -38,7 +38,7 @@ it('should move book from one bookshelf to another 1', () => {
     }
   ]
 
-  const result = new App().buildNewBookshelfs(given, "The Hobbit", 2, 1)
+  const result = new BooksApp().buildNewBookshelfs(given, "The Hobbit", 2, 1)
 
   expect(result).toEqual(
     [
@@ -87,7 +87,7 @@ it('should move book from one bookshelf to another 2', () => {
     }
   ]
 
-  const result = new App().buildNewBookshelfs(given, "To Kill a Mockingbird", 1, 2)
+  const result = new BooksApp().buildNewBookshelfs(given, "To Kill a Mockingbird", 1, 2)
 
   expect(result).toEqual(
     [
@@ -135,7 +135,7 @@ it('should move book from one bookshelf to another 3', () => {
     }
   ]
 
-  const result = new App().buildNewBookshelfs(given, "f", 3, 1)
+  const result = new BooksApp().buildNewBookshelfs(given, "f", 3, 1)
 
   expect(result).toEqual(
     [{

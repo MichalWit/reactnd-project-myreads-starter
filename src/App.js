@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
-import ShowBookshelfs from './ShowBookshelfs'
+import ShowBookshelfs from './show-bookshelfs/ShowBookshelfs'
 import Search from './search/Search'
 import * as BooksAPI from './BooksAPI'
 

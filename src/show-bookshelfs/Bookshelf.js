@@ -1,10 +1,19 @@
 import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './../App.css'
-import { Shelf } from '../main/BooksApp';
+import Book from './Book'
 var md5 = require('md5');
 
 class Bookshelf extends React.Component {
+
+  onMoveBook = (title, bookshelfId) => (event) => {
+    event.preventDefault()
+    this.props.onMoveBook(
+      title,
+      bookshelfId,
+      event.target.value
+    )
+  }
 
   render() {
     return (
@@ -14,51 +23,17 @@ class Bookshelf extends React.Component {
           <ol className="books-grid">
             {this.props.bookshelf.books.map((book) => (
               <Book
-                key={md5(book.title)}
+                key={md5(book.title + (book.authors || []).join())}
                 title={book.title}
-                authors={book.authors}
+                authors={book.authors || []}
                 image={book.image}
                 bookshelfId={this.props.bookshelf.id}
-                onMoveBook={this.props.onMoveBook}
+                onSelectOptionChange={this.onMoveBook(book.title, this.props.bookshelf.id)}
               />
             ))}
           </ol>
         </div>
       </div>
-    )
-  }
-}
-
-class Book extends React.Component {
-
-  render() {
-    const title = this.props.title;
-    const bookshelfId = this.props.bookshelfId;
-    return (
-      <li>
-        <div className="book">
-          <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.image})` }}></div>
-            <div className="book-shelf-changer">
-              <select
-                value={bookshelfId}
-                onChange={(event) => {
-                  event.preventDefault()
-                  this.props.onMoveBook(title, bookshelfId, event.target.value)
-                }}
-              >
-                <option value="move" disabled>Move to...</option>
-                <option value={Shelf.CURRENTLY_READING}>Currently Reading</option>
-                <option value={Shelf.WANT_TO_READ}>Want to Read</option>
-                <option value={Shelf.READ}>Read</option>
-                <option value={Shelf.NONE}>None</option>
-              </select>
-            </div>
-          </div>
-          <div className="book-title">{this.props.title}</div>
-          <div className="book-authors">{this.props.authors}</div>
-        </div>
-      </li>
     )
   }
 }

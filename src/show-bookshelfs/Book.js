@@ -18,7 +18,6 @@ class Book extends React.Component {
     const title = this.props.title;
     const authors = this.props.authors;
     const image = this.props.image;
-    const children = this.props.children
     return (
       <li>
         <div className="book">

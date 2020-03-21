@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './App.css'
 import ListBooksContent from './ListBooksContent'
 
-class ShowBookshelf extends React.Component {
+class ShowBookshelfs extends React.Component {
 
   render() {
     return (
@@ -24,4 +24,4 @@ class ShowBookshelf extends React.Component {
   }
 }
 
-export default ShowBookshelf
+export default ShowBookshelfs

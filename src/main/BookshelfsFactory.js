@@ -17,7 +17,7 @@ class BookshelfsFactory {
   static buildNewBookshelfs = (originalBookshelfs, id, source, destination) => {
     const { removedBook, withdrawnBookshelfs } = originalBookshelfs
       .reduce((result, bookshelf) => {
-        if (bookshelf.id == source) {
+        if (bookshelf.id === source) {
           const { removedBook, newBookshelf } = BookshelfsFactory.#removeFromBookshelf(id, bookshelf)
           result.removedBook = removedBook;
           result.withdrawnBookshelfs.push(newBookshelf);
@@ -33,7 +33,7 @@ class BookshelfsFactory {
         }
       );
     const bookshelfsWithMovedBook = withdrawnBookshelfs.map((bookshelf) => {
-      if (bookshelf.id == destination) {
+      if (bookshelf.id === destination) {
         if(removedBook) bookshelf.books.push(removedBook)
         return bookshelf
       } else {
@@ -64,7 +64,7 @@ class BookshelfsFactory {
   static #addNewBook = (originalBookshelfs, book) => {
     return originalBookshelfs
       .map((bookshelf) => {
-          if (bookshelf.id == book.bookshelfId) {
+          if (bookshelf.id === book.bookshelfId) {
             bookshelf.books.push(book);
             return bookshelf
           } else {
@@ -84,7 +84,9 @@ class BookshelfsFactory {
   }
 
   static #removeFromBookshelf = (id, bookshelf) => {
-    const [removedBookArray, newBooks] = BookshelfsFactory.#partition(bookshelf.books, (book) => (book.id == id))
+    const [removedBookArray, newBooks] = BookshelfsFactory.#partition(bookshelf.books, (book) => {
+      return book.id === id
+    })
     const removedBook = removedBookArray[0]
     if (removedBook) {
       return {

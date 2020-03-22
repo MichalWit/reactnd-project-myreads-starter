@@ -6,10 +6,10 @@ import Search from '../search/Search'
 import BookshelfsFactory from './BookshelfsFactory'
 
 export const Shelf = {
-  CURRENTLY_READING: 1,
-  WANT_TO_READ: 2,
-  READ: 3,
-  NONE: 4
+  CURRENTLY_READING: "1",
+  WANT_TO_READ: "2",
+  READ: "3",
+  NONE: "4"
 }
 
 class BooksApp extends React.Component {
@@ -51,7 +51,7 @@ class BooksApp extends React.Component {
   }
 
   getBookshelf = (bookshelfId) => {
-    return this.state.bookshelfs.find((bookshelf) => (bookshelf.id == bookshelfId))
+    return this.state.bookshelfs.find((bookshelf) => (bookshelf.id === bookshelfId))
   }
 
   render() {

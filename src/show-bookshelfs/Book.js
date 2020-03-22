@@ -11,7 +11,7 @@ class Book extends React.Component {
     authors: PropTypes.array.isRequired,
     image: PropTypes.string.isRequired,
     onSelectOptionChange: PropTypes.func.isRequired,
-    bookshelfId: PropTypes.number.isRequired
+    bookshelfId: PropTypes.string.isRequired
   }
 
   render() {

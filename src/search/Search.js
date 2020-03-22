@@ -19,7 +19,7 @@ class Search extends React.Component {
   }
 
   resolveImageUrl = (object) => {
-    if (object.imageLinks !== undefined && object.imageLinks.thumbnail != undefined) {
+    if (object.imageLinks !== undefined && object.imageLinks.thumbnail !== undefined) {
       return object.imageLinks.thumbnail;
     } else {
       return 'http://localhost:3000/book.svg'

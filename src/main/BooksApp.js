@@ -14,25 +14,13 @@ export const Shelf = {
 
 class BooksApp extends React.Component {
 
-  buildEmptyBookshelfs = () => {
-    return (
-      {
-        bookshelfs: [
-          { id: Shelf.CURRENTLY_READING, books: [] },
-          { id: Shelf.WANT_TO_READ, books: [] },
-          { id: Shelf.READ, books: [] }
-        ]
-      }
-    )
-  }
-
-  state = this.buildEmptyBookshelfs()
+  state = BookshelfsFactory.buildEmptyBookshelfs()
 
   componentDidMount = () => {
     let retrievedState = localStorage.state;
     let parsedState = null;
     if (!retrievedState)
-      parsedState = this.buildEmptyBookshelfs()
+      parsedState = BookshelfsFactory.buildEmptyBookshelfs()
     else
       parsedState = JSON.parse(retrievedState)
     this.setState(() => (

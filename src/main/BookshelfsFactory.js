@@ -15,38 +15,56 @@ class BookshelfsFactory {
   }
 
   static buildNewBookshelfs = (originalBookshelfs, id, source, destination) => {
-    const reduceResult = originalBookshelfs
+    const { removedBook, withdrawnBookshelfs } = originalBookshelfs
       .reduce((result, bookshelf) => {
         if (bookshelf.id == source) {
           const { removedBook, newBookshelf } = BookshelfsFactory.#removeFromBookshelf(id, bookshelf)
           result.removedBook = removedBook;
-          result.newBookshelfs.push(newBookshelf);
+          result.withdrawnBookshelfs.push(newBookshelf);
           return result
         } else {
-          result.newBookshelfs.push(bookshelf);
+          result.withdrawnBookshelfs.push(bookshelf);
           return result
         }
       },
         {
           removedBook: null,
-          newBookshelfs: []
+          withdrawnBookshelfs: []
         }
       );
-    const finalResult = reduceResult.newBookshelfs.map((bookshelf) => {
+    const bookshelfsWithMovedBook = withdrawnBookshelfs.map((bookshelf) => {
       if (bookshelf.id == destination) {
-        if(reduceResult.removedBook) bookshelf.books.push(reduceResult.removedBook)
+        if(removedBook) bookshelf.books.push(removedBook)
         return bookshelf
       } else {
         return bookshelf
       }
     })
-    return finalResult
+    return bookshelfsWithMovedBook
   }
 
   static buildNewBookshelfsAfterAddition = (originalBookshelfs, book, destination) => {
+    if (book.bookshelfId === Shelf.NONE) {
+      let bookOnProperShelf = JSON.parse(JSON.stringify(book))
+      bookOnProperShelf.bookshelfId = destination
+      return BookshelfsFactory.#addNewBook(
+        originalBookshelfs,
+        bookOnProperShelf
+      )
+    } else {
+      return BookshelfsFactory.buildNewBookshelfs(
+        originalBookshelfs,
+        book.id,
+        book.bookshelfId,
+        destination
+      )
+    }
+  }
+
+  static #addNewBook = (originalBookshelfs, book) => {
     return originalBookshelfs
       .map((bookshelf) => {
-          if (bookshelf.id == destination) {
+          if (bookshelf.id == book.bookshelfId) {
             bookshelf.books.push(book);
             return bookshelf
           } else {

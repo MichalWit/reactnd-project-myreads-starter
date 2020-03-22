@@ -4,22 +4,11 @@ it('should leave bookshelf intact when there is no desired book in the original 
   const given = [
     {
       id: 1,
-      books: [
-        {
-          id: "1"
-        },
-        {
-          id: "2"
-        }
-      ]
+      books: [ { id: "1" }, {  id: "2" } ]
     },
     {
       id: 2,
-      books: [
-        {
-          id: "3"
-        }
-      ]
+      books: [ { id: "3" } ]
     }
   ]
 
@@ -161,4 +150,64 @@ it('should move book from one bookshelf to another 3', () => {
       books: [ { id: "g" }, { id: "h" } ]
     }]
   )
+})
+
+it('should add a new book', () => {
+  const given = [
+    {
+      id: 1,
+      books: [ { id: "1", bookshelfId: 1}, {  id: "2", bookshelfId: 1} ]
+    },
+    {
+      id: 2,
+      books: [ { id: "3", bookshelfId: 2} ]
+    }
+  ]
+
+  const result = BookshelfsFactory.buildNewBookshelfsAfterAddition(
+    given,
+    { id: "4", bookshelfId: 4},
+    1
+  )
+
+  expect(result).toEqual([
+    {
+      id: 1,
+      books: [ { id: "1", bookshelfId: 1}, {  id: "2", bookshelfId: 1}, { id: "4", bookshelfId: 1}]
+    },
+    {
+      id: 2,
+      books: [ { id: "3", bookshelfId: 2} ]
+    }
+  ])
+})
+
+it('should move book when existing one is to be added', () => {
+  const given = [
+    {
+      id: 1,
+      books: [ { id: "1", bookshelfId: 1}, {  id: "2", bookshelfId: 1} ]
+    },
+    {
+      id: 2,
+      books: [ { id: "3", bookshelfId: 2} ]
+    }
+  ]
+
+  const result = BookshelfsFactory.buildNewBookshelfsAfterAddition(
+    given,
+    { id: "1", bookshelfId: 1},
+    2
+  )
+
+  expect(result).toEqual([
+    {
+      id: 1,
+      books: [ {  id: "2", bookshelfId: 1} ]
+    },
+    {
+      id: 2,
+      books: [ { id: "3", bookshelfId: 2}, { id: "1", bookshelfId: 1}]
+    }
+  ])
 })

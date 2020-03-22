@@ -31,7 +31,8 @@ class Search extends React.Component {
       id: object.id,
       title: object.title,
       authors: object.authors || [],
-      image: this.resolveImageUrl(object)
+      image: this.resolveImageUrl(object),
+      bookshelfId: this.searchForBookshelfId(object.id)
     }
   }
 
@@ -71,10 +72,9 @@ class Search extends React.Component {
     )
   }
 
-  searchForBookshelfId = (book) => {
-    const titleToFind = book.title
+  searchForBookshelfId = (idToFind) => {
     const bookshelf = this.props.bookshelfs.find((bookshelf) => {
-      return bookshelf.books.find((book) => book.title === titleToFind) !== undefined
+      return bookshelf.books.find((book) => book.id === idToFind) !== undefined
     })
     if (bookshelf) {
       return bookshelf.id
@@ -106,7 +106,7 @@ class Search extends React.Component {
                 title={book.title}
                 authors={book.authors}
                 image={book.image}
-                bookshelfId={this.searchForBookshelfId(book)}
+                bookshelfId={book.bookshelfId}
                 onSelectOptionChange={this.onAddBook(book)}
               />
             ))

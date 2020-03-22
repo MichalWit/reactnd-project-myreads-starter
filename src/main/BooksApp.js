@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import './../App.css'
 import ShowBookshelfs from './../show-bookshelfs/ShowBookshelfs'
 import Search from '../search/Search'
+import BookshelfsFactory from './BookshelfsFactory'
 
 export const Shelf = {
   CURRENTLY_READING: 1,
@@ -43,73 +44,9 @@ class BooksApp extends React.Component {
     localStorage.setItem('state', JSON.stringify(this.state))
   }
 
-  partition = (toPartition, predicate) => {
-    const [t, f] = toPartition
-      .reduce((result, element) => {
-        result[predicate(element) ? 0 : 1].push(element);
-        return result;
-      }, [[], []]);
-    return [t, f]
-  }
-
-  removeFromBookshelf = (id, bookshelf) => {
-    const [removedBookArray, newBookshelf] = this.partition(bookshelf.books, (book) => (book.id == id))
-    const removedBook = removedBookArray[0]
-    if (removedBook) {
-      return {
-        removedBook: removedBook,
-        newBookshelf: { id: bookshelf.id, books: newBookshelf }
-      }
-    } else {
-      return bookshelf
-    }
-  }
-
-  buildNewBookshelfs = (originalBookshelfs, id, source, destination) => {
-    const reduceResult = originalBookshelfs
-      .reduce((result, bookshelf) => {
-        if (bookshelf.id == source) {
-          const { removedBook, newBookshelf } = this.removeFromBookshelf(id, bookshelf)
-          result.removedBook = removedBook;
-          result.newBookshelfs.push(newBookshelf);
-          return result
-        } else {
-          result.newBookshelfs.push(bookshelf);
-          return result
-        }
-      },
-        {
-          removedBook: null,
-          newBookshelfs: []
-        }
-      );
-    const finalResult = reduceResult.newBookshelfs.map((bookshelf) => {
-      if (bookshelf.id == destination) {
-        bookshelf.books.push(reduceResult.removedBook)
-        return bookshelf
-      } else {
-        return bookshelf
-      }
-    })
-    return finalResult
-  }
-
-  buildNewBookshelfsAfterAddition = (originalBookshelfs, book, destination) => {
-    return originalBookshelfs
-      .map((bookshelf) => {
-          if (bookshelf.id == destination) {
-            bookshelf.books.push(book);
-            return bookshelf
-          } else {
-            return bookshelf
-          }
-        }
-      );
-  }
-
   moveBook = (id, source, destination) => {
     this.setState((currentState) => {
-      const newBookshelfs = this.buildNewBookshelfs(currentState.bookshelfs, id, source, destination)
+      const newBookshelfs = BookshelfsFactory.buildNewBookshelfs(currentState.bookshelfs, id, source, destination)
       return {
         bookshelfs: newBookshelfs
       }
@@ -118,7 +55,7 @@ class BooksApp extends React.Component {
 
   addBook = (book, destination) => {
     this.setState((currentState) => {
-      const newBookshelfs = this.buildNewBookshelfsAfterAddition(currentState.bookshelfs, book, destination)
+      const newBookshelfs = BookshelfsFactory.buildNewBookshelfsAfterAddition(currentState.bookshelfs, book, destination)
       return {
         bookshelfs: newBookshelfs
       }

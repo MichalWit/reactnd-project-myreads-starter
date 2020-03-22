@@ -5,7 +5,6 @@ import './../App.css'
 import PropTypes from 'prop-types'
 import Book from './../show-bookshelfs/Book'
 import { Shelf } from '../main/BooksApp'
-const md5 = require('md5');
 
 class Search extends React.Component {
 
@@ -40,18 +39,20 @@ class Search extends React.Component {
     this.updateQuery(query)
     BooksAPI
       .search(query)
-      .then((resp) => {
-        if (resp !== undefined && Array.isArray(resp)) {
-          const books = resp.map((object) => this.transformToBook(object))
+      .then((booksFieldFromResp) => {
+        if (booksFieldFromResp !== undefined && Array.isArray(booksFieldFromResp)) {
+          const books = booksFieldFromResp.map((object) => this.transformToBook(object))
           const uniq = [...new Set(books)];
           this.updateSearchResult(uniq)
+        } else {
+          this.updateSearchResult([])
         }
       })
   }
 
   updateQuery = (query) => {
     this.setState(() => ({
-      query: query.trim()
+      query: query
     }))
   }
 
@@ -63,9 +64,10 @@ class Search extends React.Component {
 
   onAddBook = (book) => (event) => {
     event.preventDefault()
+    const destination = event.target.value
     this.props.onAddBook(
       book,
-      event.target.value
+      destination
     )
   }
 
@@ -79,10 +81,6 @@ class Search extends React.Component {
     } else {
       return Shelf.NONE
     }
-  }
-
-  computeHashForBook = (book) => {
-    return md5(book.title + (book.authors || []).join() + book.image)
   }
 
   render() {
@@ -104,7 +102,7 @@ class Search extends React.Component {
           {
             this.state.searchResult.map((book) => (
               <Book
-                key={this.computeHashForBook(book)}
+                key={book.id}
                 title={book.title}
                 authors={book.authors}
                 image={book.image}

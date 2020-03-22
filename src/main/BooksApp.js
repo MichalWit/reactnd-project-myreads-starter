@@ -52,8 +52,8 @@ class BooksApp extends React.Component {
     return [t, f]
   }
 
-  removeFromBookshelf = (title, bookshelf) => {
-    const [removedBookArray, newBookshelf] = this.partition(bookshelf.books, (book) => (book.title == title))
+  removeFromBookshelf = (id, bookshelf) => {
+    const [removedBookArray, newBookshelf] = this.partition(bookshelf.books, (book) => (book.id == id))
     const removedBook = removedBookArray[0]
     if (removedBook) {
       return {
@@ -65,11 +65,11 @@ class BooksApp extends React.Component {
     }
   }
 
-  buildNewBookshelfs = (originalBookshelfs, title, source, destination) => {
+  buildNewBookshelfs = (originalBookshelfs, id, source, destination) => {
     const reduceResult = originalBookshelfs
       .reduce((result, bookshelf) => {
         if (bookshelf.id == source) {
-          const { removedBook, newBookshelf } = this.removeFromBookshelf(title, bookshelf)
+          const { removedBook, newBookshelf } = this.removeFromBookshelf(id, bookshelf)
           result.removedBook = removedBook;
           result.newBookshelfs.push(newBookshelf);
           return result
@@ -107,9 +107,9 @@ class BooksApp extends React.Component {
       );
   }
 
-  moveBook = (title, source, destination) => {
+  moveBook = (id, source, destination) => {
     this.setState((currentState) => {
-      const newBookshelfs = this.buildNewBookshelfs(currentState.bookshelfs, title, source, destination)
+      const newBookshelfs = this.buildNewBookshelfs(currentState.bookshelfs, id, source, destination)
       return {
         bookshelfs: newBookshelfs
       }

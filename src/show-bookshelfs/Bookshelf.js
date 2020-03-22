@@ -6,10 +6,10 @@ var md5 = require('md5');
 
 class Bookshelf extends React.Component {
 
-  onMoveBook = (title, bookshelfId) => (event) => {
+  onMoveBook = (id, bookshelfId) => (event) => {
     event.preventDefault()
     this.props.onMoveBook(
-      title,
+      id,
       bookshelfId,
       event.target.value
     )
@@ -23,12 +23,12 @@ class Bookshelf extends React.Component {
           <ol className="books-grid">
             {this.props.bookshelf.books.map((book) => (
               <Book
-                key={md5(book.title + (book.authors || []).join())}
+                key={book.id}
                 title={book.title}
                 authors={book.authors || []}
                 image={book.image}
                 bookshelfId={this.props.bookshelf.id}
-                onSelectOptionChange={this.onMoveBook(book.title, this.props.bookshelf.id)}
+                onSelectOptionChange={this.onMoveBook(book.id, this.props.bookshelf.id)}
               />
             ))}
           </ol>

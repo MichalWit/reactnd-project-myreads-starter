@@ -19,11 +19,20 @@ class Search extends React.Component {
     searchResult: []
   }
 
+  resolveImageUrl = (object) => {
+    if (object.imageLinks !== undefined && object.imageLinks.thumbnail != undefined) {
+      return object.imageLinks.thumbnail;
+    } else {
+      return 'http://localhost:3000/book.svg'
+    }
+  }
+
   transformToBook = (object) => {
     return {
+      id: object.id,
       title: object.title,
       authors: object.authors || [],
-      image: object.imageLinks.thumbnail
+      image: this.resolveImageUrl(object)
     }
   }
 

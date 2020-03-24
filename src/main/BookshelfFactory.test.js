@@ -1,4 +1,5 @@
 import BookshelfsFactory from "./BookshelfsFactory"
+import { Shelf } from "./BooksApp"
 
 it('should leave bookshelf intact when there is no desired book in the original bookshelf', () => {
   const given = [
@@ -155,29 +156,29 @@ it('should move book from one bookshelf to another 3', () => {
 it('should add a new book', () => {
   const given = [
     {
-      id: 1,
-      books: [ { id: "1", bookshelfId: 1}, {  id: "2", bookshelfId: 1} ]
+      id: Shelf.CURRENTLY_READING,
+      books: [ { id: "1", bookshelfId: Shelf.CURRENTLY_READING}, {  id: "2", bookshelfId: Shelf.CURRENTLY_READING} ]
     },
     {
-      id: 2,
-      books: [ { id: "3", bookshelfId: 2} ]
+      id: Shelf.WANT_TO_READ,
+      books: [ { id: "3", bookshelfId: Shelf.WANT_TO_READ} ]
     }
   ]
 
   const result = BookshelfsFactory.buildNewBookshelfsAfterAddition(
     given,
-    { id: "4", bookshelfId: 4},
-    1
+    { id: "4", bookshelfId: Shelf.NONE},
+    Shelf.CURRENTLY_READING
   )
 
   expect(result).toEqual([
     {
-      id: 1,
-      books: [ { id: "1", bookshelfId: 1}, {  id: "2", bookshelfId: 1}, { id: "4", bookshelfId: 1}]
+      id: Shelf.CURRENTLY_READING,
+      books: [ { id: "1", bookshelfId: Shelf.CURRENTLY_READING}, {  id: "2", bookshelfId: Shelf.CURRENTLY_READING}, { id: "4", bookshelfId: Shelf.CURRENTLY_READING}]
     },
     {
-      id: 2,
-      books: [ { id: "3", bookshelfId: 2} ]
+      id: Shelf.WANT_TO_READ,
+      books: [ { id: "3", bookshelfId: Shelf.WANT_TO_READ} ]
     }
   ])
 })

@@ -55,8 +55,16 @@ class BooksApp extends React.Component {
       })
   }
 
-  componentDidUpdate = () => {
-    localStorage.setItem('state', JSON.stringify(this.state))
+  #updateBookOnServer = (book, destination) => {
+    BooksAPI
+      .update(book, destination)
+      .then((resp) => {
+        if (resp !== undefined) {
+          console.log(resp)
+        } else {
+          console.log("no resp?")
+        }
+      })
   }
 
   moveBook = (id, source, destination) => {
@@ -66,6 +74,7 @@ class BooksApp extends React.Component {
         bookshelfs: newBookshelfs
       }
     })
+    this.#updateBookOnServer({id: id}, destination)
   }
 
   addBook = (book, destination) => {
@@ -75,15 +84,7 @@ class BooksApp extends React.Component {
         bookshelfs: newBookshelfs
       }
     })
-    BooksAPI
-      .update(book.id, destination)
-      .then((resp) => {
-        if (resp !== undefined) {
-          console.log(resp)
-        } else {
-          console.log("no resp?")
-        }
-      })
+    this.#updateBookOnServer(book, destination)
   }
 
   getBookshelf = (bookshelfId) => {

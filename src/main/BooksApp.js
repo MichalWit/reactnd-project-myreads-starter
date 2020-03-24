@@ -4,28 +4,55 @@ import './../App.css'
 import ShowBookshelfs from './../show-bookshelfs/ShowBookshelfs'
 import Search from '../search/Search'
 import BookshelfsFactory from './BookshelfsFactory'
+import * as BooksAPI from './../BooksAPI'
 
 export const Shelf = {
-  CURRENTLY_READING: "1",
-  WANT_TO_READ: "2",
-  READ: "3",
-  NONE: "4"
+  CURRENTLY_READING: "currentlyReading",
+  WANT_TO_READ: "wantToRead",
+  READ: "read",
+  NONE: "none"
 }
 
 class BooksApp extends React.Component {
 
   state = BookshelfsFactory.buildEmptyBookshelfs()
 
+  #resolveImageUrl = (object) => {
+    if (object.imageLinks !== undefined && object.imageLinks.thumbnail !== undefined) {
+      return object.imageLinks.thumbnail;
+    } else {
+      return 'http://localhost:3000/book.svg'
+    }
+  }
+
+  #transformToBook = (object) => {
+    return {
+      id: object.id,
+      title: object.title,
+      authors: object.authors || [],
+      image: this.#resolveImageUrl(object),
+      bookshelfId: object.shelf
+    }
+  }
+
   componentDidMount = () => {
-    let retrievedState = localStorage.state;
-    let parsedState = null;
-    if (!retrievedState)
-      parsedState = BookshelfsFactory.buildEmptyBookshelfs()
-    else
-      parsedState = JSON.parse(retrievedState)
-    this.setState(() => (
-      parsedState
-    ))
+    BooksAPI
+      .getAll()
+      .then((resp) => {
+        if (resp !== undefined && Array.isArray(resp)) {
+          const books = resp.map((book) => this.#transformToBook(book))
+          const wantToRead = books.filter((book) => (book.bookshelfId === Shelf.WANT_TO_READ))
+          const read = books.filter((book) => (book.bookshelfId === Shelf.READ))
+          const currentlyReading = books.filter((book) => (book.bookshelfId === Shelf.CURRENTLY_READING))
+          this.setState(() => ({
+            bookshelfs: [
+              { id: Shelf.CURRENTLY_READING, books: currentlyReading },
+              { id: Shelf.WANT_TO_READ, books: wantToRead },
+              { id: Shelf.READ, books: read }
+            ]
+          }))
+        }
+      })
   }
 
   componentDidUpdate = () => {
@@ -48,6 +75,15 @@ class BooksApp extends React.Component {
         bookshelfs: newBookshelfs
       }
     })
+    BooksAPI
+      .update(book.id, destination)
+      .then((resp) => {
+        if (resp !== undefined) {
+          console.log(resp)
+        } else {
+          console.log("no resp?")
+        }
+      })
   }
 
   getBookshelf = (bookshelfId) => {
